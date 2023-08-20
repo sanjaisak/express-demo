@@ -19,7 +19,7 @@ pipeline {
                 }
             }
         }
-        
+
        stage('Build') {
             steps {
                 // Build a Docker image for your Express application
@@ -30,7 +30,7 @@ pipeline {
       stage('Deploy') {
             steps {
                 // Deploy the Docker container using the built image
-                sh "docker run -d -p 3000:3000 $DOCKER_IMAGE"
+                sh "docker run -d -p 3000:3000 --name rasoi $DOCKER_IMAGE"
             }
         }
     }
@@ -38,6 +38,7 @@ pipeline {
     post {
         always {
             sh 'docker rmi pesto'
+            sh 'docker rm rasoi'
         }
     }
 }
