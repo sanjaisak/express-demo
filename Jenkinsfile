@@ -6,7 +6,7 @@ pipeline {
       tools {nodejs "nodejs"}
 
     environment{
-        DOCKER_IMAGE = "Pesto"
+        DOCKER_IMAGE = "pesto"
     }
 
     stages {
