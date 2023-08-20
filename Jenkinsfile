@@ -22,10 +22,10 @@ pipeline {
 
        stage('Build') {
             steps {
-                try{
+                try {
                     sh 'docker stop rasoi'
                     sh 'docker rm rasoi'
-                }catch (Exception e){
+                } catch (Exception e) {
                     echo 'Exception occurred: ' + e.toString()
                 }
                 // Build a Docker image for your Express application
