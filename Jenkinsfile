@@ -27,7 +27,6 @@ pipeline {
 
        stage('Build') {
             steps {
-                sh 'sudo usermod -aG docker $USER'
                 // Build a Docker image for your Express application
                 sh 'docker build -t $DOCKER_IMAGE .'
             }
