@@ -3,10 +3,7 @@
 pipeline {
     agent any
 
-    environment{
-        NODE_VERSION="v14.21.2"
-        PATH="${env.NVM_HOME}/${NODE_VERSION};${env.PATH}"
-    }
+    tools {nodejs "nodejs"}
 
     stages {
         stage('Checkout') {
