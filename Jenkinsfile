@@ -3,9 +3,10 @@
 pipeline {
     agent any
 
+      tools {nodejs "nodejs"}
+
     environment{
-        NODE_VERSION="v14.21.2"
-        PATH="${env.NVM_HOME}/${NODE_VERSION};${env.PATH}"
+        DOCKER_IMAGE = "your-docker-image-name"
     }
 
     stages {
@@ -14,35 +15,7 @@ pipeline {
                 // Cleanup workspace cache before build
                 cleanWs()
                 script {
-                    def branch = "*/main";
-                    echo "Checking out changes for ${branch}"
-                    def scmVars = checkout([
-                        $class: 'GitSCM',
-                        branches: [[name: branch]],
-                        doGenerateSubmoduleConfigurations: false,
-                        extensions: [
-                            [$class: 'CleanBeforeCheckout'],
-                            [$class: 'CloneOption', timeout: 20]
-                        ],
-                        submoduleCfg: [],
-                        userRemoteConfigs: [
-                            [
-                                url: 'https://github.com/sanjaisak/express-demo.git'
-                            ]
-                        ]
-                    ])
-
-                    // Push the GIT variables into the environment for us
-                    // to use in later stages (for example for ci-build-email)
-                    env.GIT_BRANCH = scmVars.GIT_BRANCH
-                    env.GIT_COMMIT = scmVars.GIT_COMMIT
-                    env.GIT_PREVIOUS_COMMIT = scmVars.GIT_PREVIOUS_COMMIT
-                    env.GIT_PREVIOUS_SUCCESSFUL_COMMIT = scmVars.GIT_PREVIOUS_SUCCESSFUL_COMMIT
-
-                    // We need COMMIT_ID when publishing package (publishSite.js)
-                    // We could probably use GIT_COMMIT, but it isn't clear if
-                    // GIT_COMMIT will always have the value we need or not.
-                    env.COMMIT_ID = sh(returnStdout: true, script: 'git rev-parse HEAD')
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/sanjaisak/express-demo.git']]])
                 }
             }
         }
@@ -52,10 +25,26 @@ pipeline {
                 }
             }
 
-        stage('deploy'){
-            steps{
-                sh 'npm run start'
-                }
+       stage('Build') {
+            steps {
+                // Build a Docker image for your Express application
+                sh 'docker build -t $DOCKER_IMAGE .'
             }
+        }
+
+      stage('Deploy') {
+            steps {
+                // Deploy the Docker container using the built image
+                sh "docker run -d -p 3000:3000 --name your-container-name $DOCKER_IMAGE"
+            }
+        }
+    }
+
+    post {
+        always {
+            // Stop and remove the Docker container after deployment
+            sh 'docker stop your-container-name'
+            sh 'docker rm your-container-name'
+        }
     }
 }
