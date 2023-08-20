@@ -6,7 +6,7 @@ pipeline {
       tools {nodejs "nodejs"}
 
     environment{
-        DOCKER_IMAGE = "your-docker-image-name"
+        DOCKER_IMAGE = "Pesto"
     }
 
     stages {
@@ -35,16 +35,14 @@ pipeline {
       stage('Deploy') {
             steps {
                 // Deploy the Docker container using the built image
-                sh "docker run -d -p 3000:3000 --name your-container-name $DOCKER_IMAGE"
+                sh "docker run -d -p 3000:3000 --name rasoi $DOCKER_IMAGE"
             }
         }
     }
 
     post {
         always {
-            // Stop and remove the Docker container after deployment
-            sh 'docker stop your-container-name'
-            sh 'docker rm your-container-name'
+            sh 'docker rmi pesto'
         }
     }
 }
