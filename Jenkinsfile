@@ -29,7 +29,6 @@ pipeline {
 
       stage('Deploy') {
             steps {
-                 sh 'docker stop rasoi'
                 // Deploy the Docker container using the built image
                 sh "docker run -d -p 3000:3000 --name rasoi $DOCKER_IMAGE"
             }
@@ -38,7 +37,7 @@ pipeline {
 
     post {
         always {
-            sh 'rasoi'
+            sh 'docker stop rasoi'
             sh 'docker rm rasoi'
         }
     }
