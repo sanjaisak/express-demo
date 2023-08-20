@@ -38,7 +38,7 @@ pipeline {
 
     post {
         always {
-            sh 'docker rmi pesto'
+            sh 'rasoi'
             sh 'docker rm rasoi'
         }
     }
