@@ -19,12 +19,7 @@ pipeline {
                 }
             }
         }
-        stage('Setup'){
-            steps{
-                sh 'npm ci'
-                }
-            }
-
+        
        stage('Build') {
             steps {
                 // Build a Docker image for your Express application
