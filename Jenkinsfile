@@ -2,9 +2,8 @@
 
 pipeline {
     agent any
-    environment {
-        CI = 'true' 
-    }
+    tools {nodejs "nodejs"}
+    
     stages {
         stage('Checkout') {
             steps {
