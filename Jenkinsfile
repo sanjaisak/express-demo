@@ -22,6 +22,12 @@ pipeline {
 
        stage('Build') {
             steps {
+                try{
+                    sh 'docker stop rasoi'
+                    sh 'docker rm rasoi'
+                }catch (Exception e){
+                    echo 'Exception occurred: ' + e.toString()
+                }
                 // Build a Docker image for your Express application
                 sh 'docker build -t $DOCKER_IMAGE .'
             }
@@ -32,13 +38,6 @@ pipeline {
                 // Deploy the Docker container using the built image
                 sh "docker run -d -p 3000:3000 --name rasoi $DOCKER_IMAGE"
             }
-        }
-    }
-
-    post {
-        always {
-            sh 'docker stop rasoi'
-            sh 'docker rm rasoi'
         }
     }
 }
