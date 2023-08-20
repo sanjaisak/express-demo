@@ -1,5 +1,12 @@
+#!/usr/local/bin/groovy
+
 pipeline {
     agent any
+
+    environment{
+        NODE_VERSION="v14.21.2"
+        PATH="${env.NVM_HOME}/${NODE_VERSION};${env.PATH}"
+    }
 
     stages {
         stage('Checkout') {
