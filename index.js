@@ -1,9 +1,9 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const port = 3000; // You can change this port if needed
 
-app.get('/', (req, res) => {
-  res.send('Hello wow everyone this time!!');
+app.get("/", (req, res) => {
+  res.send("Hello!!");
 });
 
 app.listen(port, () => {
