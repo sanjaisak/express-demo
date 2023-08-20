@@ -4,7 +4,11 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-                echo 'Hello World'
+                git clone https://github.com/sanjaisak/express-demo.git
+                dir("expres-demo"){
+                    sh 'npm i'
+                    sh 'npm run start'
+                }
             }
         }
     }
